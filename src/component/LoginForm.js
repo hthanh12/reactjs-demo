@@ -1,85 +1,74 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react'
+import { Avatar, CssBaseline, TextField, Link, Paper, Box, Grid, Typography, InputLabel, MenuItem, FormControl, Select, Stack } from '@mui/material'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import LoadingButton from '@mui/lab/LoadingButton'
 import axios from 'axios'
-const servers = [
-  {id:1, name:'DEV', link:process.env.REACT_APP_LINK_IWS_DEV},
-  {id:2, name:'STAGING', link:process.env.REACT_APP_LINK_IWS_STAGING},
-]
+import { TEAM_MEMBER, TEAM_NAME, SERVERS } from '../utils/data'
+
 const userDetault = {
   email: process.env.REACT_APP_USER_IWS,
   password: process.env.REACT_APP_PWD_IWS,
 }
-console.log("🚀 ~ file: LoginForm.js ~ line 28 ~ userDetault", userDetault)
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/hthanh12">
-      Thanh Uchiha - Team WRF 
+        Thành Uchiha - {TEAM_NAME}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  )
 }
 
-const theme = createTheme();
+const theme = createTheme()
 
 export default function LoginForm() {
-  const [server, setServer] = React.useState(servers[0]);
+  const [server, setServer] = useState(SERVERS[0])
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (event) => {
-    let findSever = servers.find((o)=> o.id*1 === event.target.value*1)
-    console.log(findSever);
-    setServer(findSever);
-  };
+    let findSever = SERVERS.find((o) => o.id * 1 === event.target.value * 1)
+    console.log(findSever)
+    setServer(findSever)
+  }
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    let dataLogin =JSON.stringify({
+    setLoading(true)
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    let dataLogin = JSON.stringify({
       email: data.get('email'),
       password: data.get('password'),
     })
     console.log(dataLogin)
-    const link = servers.find((o)=> o.id*1 === data.get('server')*1).link
+    const findServer = SERVERS.find((o) => o.id * 1 === data.get('server') * 1)
 
     var config = {
       method: 'post',
-      url: link+'/login',
-      headers: { 
+      url: findServer.link + '/login',
+      headers: {
         'Content-Type': 'application/json'
       },
-      data : dataLogin
-    };
+      data: dataLogin
+    }
 
     axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      alert('Nhập sai mật khẩu hoặc tài khoản rồi bạn eiiiiiiiiiiiiiiiii')
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(JSON.stringify(response.data))
+        localStorage.setItem('iws', JSON.stringify(response.data))
+        localStorage.setItem('env', JSON.stringify(findServer.name))
+        setLoading(false)
+        window.location.reload(true);
+      })
+      .catch(function (error) {
+        alert('Nhập sai mật khẩu hoặc tài khoản rồi bạn eiiiiiiiiiiiiiiiii\n' + error.message)
+        localStorage.setItem('iws', null)
+        setLoading(false)
+      })
 
-
-  };
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,11 +98,14 @@ export default function LoginForm() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
-            </Avatar>
+            </Avatar> */}
+            <Stack direction="row" spacing={2}>
+              {TEAM_MEMBER.map((member) => <Avatar key={member.id} alt={member.name} src={member.avt}></Avatar>)}
+            </Stack>
             <Typography component="h1" variant="h5">
-              Sign in
+              {TEAM_NAME} - HIP HOP NEVER DIE
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -138,37 +130,38 @@ export default function LoginForm() {
                 autoComplete="current-password"
                 defaultValue={userDetault.password}
               />
-              <Box sx={{ minWidth: 120,mt: 1  }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Select Sever</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={server.id ?? ''}
-                        label="server"
-                        onChange={handleChange}
-                        name="server"
-                      >
-                        {
-                          servers.map((server)=> <MenuItem key={server.id} value={server.id}> {server.name}</MenuItem>)
-                        }
-                      </Select>
-                    </FormControl>
-                  </Box>
-{/*               
+              <Box sx={{ minWidth: 120, mt: 1 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Select Sever</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={server.id ?? ''}
+                    label="server"
+                    onChange={handleChange}
+                    name="server"
+                  >
+                    {
+                      SERVERS.map((server) => <MenuItem key={server.id} value={server.id}> {server.name}</MenuItem>)
+                    }
+                  </Select>
+                </FormControl>
+              </Box>
+              {/*               
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               /> */}
-              <Button
+              <LoadingButton
+                loading={loading}
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
-              </Button>
-              
+              </LoadingButton>
+
               <Grid container>
                 <Grid item xs>
                   {/* <Link href="#" variant="body2">
@@ -187,5 +180,5 @@ export default function LoginForm() {
         </Grid>
       </Grid>
     </ThemeProvider>
-  );
+  )
 }
