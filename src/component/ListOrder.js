@@ -100,7 +100,7 @@ export default function BasicTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.length === 0 ? <TableRow>Not found data</TableRow> : rows.map((row) => (
+                    {rows.length === 0 ? <TableRow><TableCell>Not found data</TableCell></TableRow> : rows.map((row) => (
                         <TableRow
                             key={row.key}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -119,7 +119,8 @@ export default function BasicTable() {
                             <TableCell align="right">
                                 <Stack >
                                     <Button variant="contained" startIcon={<PreviewIcon />} onClick={() => navigate(`/order/${row.id}`)} id={row.id}> View Detail </Button>
-                                </Stack></TableCell>
+                                </Stack>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

@@ -57,7 +57,16 @@ let GET_NAME_STATUS_ORDER = (id) => {
   let findStatus = STATUSES_ORDER.find(element => element.id === id)
   return findStatus ? findStatus.name : ''
 }
-
+const TYPES_ORDER = [
+  { id: 1, name: 'Đơn bán' },
+  { id: 2, name: 'Đơn tặng' },
+  { id: 3, name: 'Đơn cọc' },
+  { id: 4, name: 'Đơn công tác' }
+]
+let GET_NAME_TYPE_ORDER = (id) => {
+  let findStatus = TYPES_ORDER.find(element => element.id === id)
+  return findStatus ? findStatus.name : ''
+}
 export {
   MEMBERS, TEAM_NAME, TEAM_MEMBER, SERVERS, STATUSES_ORDER, GET_NAME_STATUS_ORDER, STATUS_NEW, STATUS_CONFIRM,
   STATUS_CANCELLED_CONFIRM,
@@ -66,4 +75,5 @@ export {
   STATUS_DELIVERIRNG,
   STATUS_CANCELLED_DELIVER,
   STATUS_COMPLETED,
+  GET_NAME_TYPE_ORDER,
 }

@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import { AppBar, IconButton, Box, Toolbar, Typography, Button, Stack } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-
+import LogoutIcon from '@mui/icons-material/Logout'
 export default function ButtonAppBar() {
     const navigate = useNavigate();
 
@@ -25,11 +20,15 @@ export default function ButtonAppBar() {
         };
     }, [env]);
 
-    let onClickHandle = () => {
+    let onClickHandleLogout = () => {
         localStorage.removeItem('iws')
         localStorage.removeItem('env')
         setEnv(null)
         window.location.reload(true);
+        navigate(`/`)
+    }
+
+    let onClickHandleHome = () => {
         navigate(`/`)
     }
 
@@ -47,9 +46,12 @@ export default function ButtonAppBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Button variant="text" sx={{ color: 'white' }} onClick={onClickHandleHome}>Home</Button>
                     </Typography>
-                    {env} - {iws.id} - {iws.name}
-                    <Button color="inherit" onClick={onClickHandle}>Logout</Button>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        {env} - {iws.id} - {iws.name}
+                    </Typography>
+                    <Button color="inherit" onClick={onClickHandleLogout} endIcon={<LogoutIcon />}>Logout</Button>
                 </Toolbar>
             </AppBar>
         </Box>

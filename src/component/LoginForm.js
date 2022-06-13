@@ -22,6 +22,17 @@ function Copyright(props) {
   )
 }
 
+let getRandomBackground = () => {
+  let array = [{
+    id: 1,
+    name: 'team',
+    url: 'https://media.discordapp.net/attachments/752362298831667332/983121266842173530/QR.jpg'
+  },]
+
+
+
+  return array[Math.floor(Math.random() * array.length)].url
+}
 const theme = createTheme()
 
 export default function LoginForm() {
@@ -69,7 +80,7 @@ export default function LoginForm() {
       })
 
   }
-
+  let urlBG = getRandomBackground()
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -80,7 +91,7 @@ export default function LoginForm() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://media.discordapp.net/attachments/752362298831667332/983121266842173530/QR.jpg)',
+            backgroundImage: `url(${urlBG})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

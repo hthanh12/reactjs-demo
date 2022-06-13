@@ -9,8 +9,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   const [auth, setAuth] = useState(!!localStorage.getItem("iws"))
-
-  console.log("🚀 ~ file: App.js ~ line 6 ~ App ~ setAuth", auth)
   return (
     <>
       <BrowserRouter>
