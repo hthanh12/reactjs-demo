@@ -34,7 +34,7 @@ let renderButton = (row, text, status_check, icon, onClickHandle,) => {
 
 let config = {
     method: 'get',
-    url: `${process.env.REACT_APP_LINK_IWS_DEV}/orders?not_parent=true&page=1&perPage=10&list_status=[1,2]`,
+    url: `${process.env.REACT_APP_LINK_IWS_DEV}/orders?page=1&perPage=30`,
     headers: {
         'Authorization': null
     },
