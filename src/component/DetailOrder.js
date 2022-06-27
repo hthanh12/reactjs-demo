@@ -173,7 +173,6 @@ export default function CustomPaginationActionsTable() {
         let response = null
         try {
             response = await axios(configCreateSync)
-            console.log("🚀 ~ file: DetailOrder.js ~ line 166 ~ createSyncOutput ~ response", response)
         } catch (error) {
             console.log('sync-login', error)
             response = error.response
@@ -212,15 +211,17 @@ export default function CustomPaginationActionsTable() {
     const ACTION_CREATE_OUTPUT_BILL = 2
     const onClickHandle = async (e) => {
         setLoadingButton(true)
-        console.log('value', e.target.value)
         let getToken = await LoginWMS()
-        console.log('2222', getToken)
 
         if (tokenWms) {
             let getDataSync = await fetchDataSync()
             console.log('getDataSync', getDataSync)
             if (e.target.value * 1 === ACTION_CONFIRM) {
-                alert('Đã xác nhận lệnh thành công')
+                if (detail.type * 1 === 3) {
+                    alert('Cái này chưa làm !! Gửi qua tin nhắn qua Momo rồi sẽ có')
+                } else {
+                    alert('Đã xác nhận lệnh thành công')
+                }
             }
 
             if (e.target.value * 1 === ACTION_CREATE_OUTPUT_BILL) {
