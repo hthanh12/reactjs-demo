@@ -41,7 +41,7 @@ const SERVERS = [
   },
   // { id: 2, name: 'STAGING', link: process.env.REACT_APP_LINK_IWS_STAGING },
 ];
-const VERSION = "0.0.1";
+const VERSION = "0.0.2";
 
 const STATUS_NEW = 1;
 const STATUS_CONFIRM = 2;
